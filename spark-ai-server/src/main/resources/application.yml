@@ -1,0 +1,22 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: spark-ai-server
+  ai:
+    mcp:
+      server:
+        name: mcp-server
+        version: 1.0.0
+        protocol: streamable
+        type: sync
+        streamable-http:
+          mcp-endpoint: /mcp
+          keep-alive-interval: 30s
+    dashscope:
+      api-key: sk-3e7f5f077bf94940a6363ec9aaf82944
+  data:
+    elasticsearch:
+      uris: http://localhost:9200
+  main:
+    allow-bean-definition-overriding: true
