@@ -20,6 +20,7 @@
         <module>spark-common-mybatis</module>
         <module>spark-common-swagger</module>
         <module>spark-common-elasticsearch</module>
+        <module>spark-common-redis</module>
     </modules>
 
     <properties>

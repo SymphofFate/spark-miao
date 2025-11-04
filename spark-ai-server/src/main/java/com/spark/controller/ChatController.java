@@ -6,8 +6,8 @@ package com.spark.controller;
  * @Description
  */
 
-import com.spark.entity.ChatRequest;
-import com.spark.entity.ChatResponse;
+import com.spark.dto.ChatRequest;
+import com.spark.dto.ChatResponse;
 import com.spark.entity.KnowledgeDocument;
 import com.spark.service.ElasticsearchService;
 import com.spark.service.impl.RAGService;
@@ -59,39 +59,7 @@ public class ChatController {
      */
     @PostMapping("/ask")
     public Result askWithKnowledge(@RequestBody ChatRequest request) {
-        log.info("收到知识库问答请求: {}", request.getQuestion());
-
-        try {
-            String answer = ragService.askWithKnowledgeBase(
-                    request.getCode(),
-                    request.getQuestion(),
-                    request.getConversationId()
-            );
-
-            ChatResponse response = ChatResponse.builder()
-                    .question(request.getQuestion())
-                    .answer(answer)
-                    .conversationId(request.getConversationId())
-                    .timestamp(new Date())
-                    .success(true)
-                    .build();
-
-            return Result.success(response);
-
-        } catch (Exception e) {
-            log.error("知识库问答失败: {}", e.getMessage(), e);
-
-            ChatResponse response = ChatResponse.builder()
-                    .question(request.getQuestion())
-                    .answer("系统繁忙，请稍后重试")
-                    .conversationId(request.getConversationId())
-                    .timestamp(new Date())
-                    .success(false)
-                    .errorMessage(e.getMessage())
-                    .build();
-
-            return Result.success(response);
-        }
+        return ragService.askWithKnowledgeBase(request);
     }
 
     /**

@@ -18,5 +18,28 @@ spring:
   data:
     elasticsearch:
       uris: http://localhost:9200
+    redis:
+      database: 4
+      password: xing123
+      timeout: 30s
+      host: 8.155.39.234
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/miao?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+    username: root
+    password: 123456
+
   main:
     allow-bean-definition-overriding: true
+
+
+logging:
+  level:
+    sql: debug
+    com:
+      spark: debug
+
+management:
+  health:
+    elasticsearch:
+      enabled: false
