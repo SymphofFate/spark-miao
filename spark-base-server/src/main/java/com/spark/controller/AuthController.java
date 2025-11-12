@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "登陆服务")
 @RestController
 @RequestMapping("auth")
-@CrossOrigin
 public class AuthController {
 
     @Autowired

@@ -21,6 +21,7 @@
         <module>spark-common-swagger</module>
         <module>spark-common-elasticsearch</module>
         <module>spark-common-redis</module>
+        <module>spark-common-minio</module>
     </modules>
 
     <properties>

@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    gateway:
+      metrics:
+        enabled: true
+      discovery:
+        locator:
+          enabled: true
+    nacos:
+      username: nacos
+      password: nacos
+      discovery:
+        server-addr: ${nacos_host:115.190.232.251}:${nacos_port:8848}
+        namespace:
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        namespace: ${spring.cloud.nacos.discovery.namespace}
+        file-extension: yaml
+        refresh-enabled: true
+        group: DEFAULT_GROUP
+        extension-configs:
+          - data-id: common.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - data-id: gateway.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+

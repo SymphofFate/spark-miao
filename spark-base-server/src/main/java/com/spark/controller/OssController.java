@@ -23,7 +23,6 @@ import java.util.Map;
 @Tag(name = "文件服务")
 @RestController
 @RequestMapping("oss")
-@CrossOrigin
 public class OssController {
 
     @Resource
