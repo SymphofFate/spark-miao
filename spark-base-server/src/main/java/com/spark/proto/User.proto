@@ -1,0 +1,27 @@
+syntax = "proto3"; // 协议版本
+
+package com.spark.proto;
+
+// 选项配置
+option java_multiple_files = true;
+//生成位置
+option java_package = "com.spark.proto";
+option java_outer_classname = "UserProto";
+
+service Simple {
+  // 简单gRPC
+  rpc OneToOne (MyRequest) returns (MyResponse) {
+  }
+}
+
+message MyRequest {
+  string name = 1;
+
+  int32 value = 2;
+}
+
+message MyResponse {
+  string message = 1;
+
+  int64 result = 2;
+}

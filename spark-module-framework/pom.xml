@@ -22,6 +22,8 @@
         <module>spark-common-elasticsearch</module>
         <module>spark-common-redis</module>
         <module>spark-common-minio</module>
+        <module>spark-common-grpc</module>
+        <module>spark-common-statemachine</module>
     </modules>
 
     <properties>

@@ -32,8 +32,8 @@ public class SwaggerConfig {
         License license = new License();
         license.setName("miao");
         return new OpenAPI().info(new Info()
-                .title("MIAO框架")
-                .description("一个基于springboot3.3.0的框架")
+                .title("SPARK-MIAO框架")
+                .description("一个基于springboot的框架")
                 .contact(contact)
                 .version("1.0")
                 .termsOfService("RESTful API"));
