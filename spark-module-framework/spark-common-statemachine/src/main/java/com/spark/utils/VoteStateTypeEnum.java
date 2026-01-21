@@ -24,4 +24,17 @@ public enum VoteStateTypeEnum {
     public String getStateType() {
         return stateType;
     }
+
+    public Integer getCode(){
+        return code;
+    }
+
+    public static VoteStateTypeEnum getEnum(Integer code){
+        for (VoteStateTypeEnum stateTypeEnum : VoteStateTypeEnum.values()){
+            if (stateTypeEnum.code==code){
+                return stateTypeEnum;
+            }
+        }
+        return null;
+    }
 }

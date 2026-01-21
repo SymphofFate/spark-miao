@@ -2,6 +2,7 @@ package com.spark.config;
 
 import com.spark.utils.VoteStateTypeEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.Message;
 import org.springframework.statemachine.annotation.OnTransition;
 import org.springframework.statemachine.annotation.WithStateMachine;
 import org.springframework.stereotype.Component;
@@ -23,24 +24,24 @@ public class VoteStatusListener {
     }
 
 
-    @OnTransition(target = "进行中")
-    public void start(){
-        log.info("开始活动");
+    @OnTransition(source = "未开始",target = "进行中")
+    public void start(Message<VoteStateTypeEnum> message){
+        log.info("开始活动:{}",message);
     }
 
     @OnTransition(source = "进行中",target = "暂停")
-    public void pause(){
-        log.info("活动暂停");
+    public void pause(Message<VoteStateTypeEnum> message){
+        log.info("活动暂停:{}",message);
     }
 
-//    @OnTransition(source = "暂停",target = "进行中")
-//    public void inProgress(){
-//        log.info("活动继续");
-//    }
+    @OnTransition(source = "暂停",target = "进行中")
+    public void inProgress(){
+        log.info("活动继续");
+    }
 
     @OnTransition(target = "结束")
-    public void over(){
-        log.info("活动结束");
+    public void over(Message<VoteStateTypeEnum> message){
+        log.info("活动结束:{}",message);
     }
 
 //    @OnTransition(source = "进行中",target = "结束")

@@ -1,6 +1,10 @@
 package com.spark.controller;
 
+import com.spark.service.TestService;
 import com.spark.utils.*;
+import io.lettuce.core.dynamic.annotation.Param;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.statemachine.StateMachine;
@@ -18,6 +22,9 @@ public class TestController {
 
     @Resource(name = "VoteStateMachine")
     private StateMachine<VoteStateTypeEnum, VoteEventTypeEnum> voteEventTypeEnumStateMachine;
+
+    @Resource
+    private TestService service;
     
 
     @GetMapping("/hello")
@@ -37,45 +44,23 @@ public class TestController {
 
     @GetMapping("test")
     public Result statemachineTest(){
-        orderStateMachine.start();
-        // 当前状态应该是CREATED
-        // 发送支付事件，期望状态变为PAID
-        boolean payResult = orderStateMachine.sendEvent(OrderEvent.PAY);
-        System.out.println("支付事件结果：" + payResult);
-//        // 发送发货事件，期望状态变为SHIPPED
-//        boolean deliverResult = orderStateMachine.sendEvent(OrderEvent.DELIVER);
-//        System.out.println("发货事件结果：" + deliverResult);
-//        // 发送收货事件，期望状态变为COMPLETED
-//        boolean receiveResult = orderStateMachine.sendEvent(OrderEvent.RECEIVE);
-//        System.out.println("收货事件结果：" + receiveResult);
-
+        service.statemachineTest();
         return Result.success();
     }
 
 
     @GetMapping("vote")
-    public Result voteTest() throws InterruptedException {
-        Thread thread = new Thread(() -> {
-            voteEventTypeEnumStateMachine.start();
-            try {
-                voteEventTypeEnumStateMachine.sendEvent(VoteEventTypeEnum.创建活动);
-                Thread.sleep(1000);
-                voteEventTypeEnumStateMachine.sendEvent(VoteEventTypeEnum.开始活动);
-                Thread.sleep(1000);
-                voteEventTypeEnumStateMachine.sendEvent(VoteEventTypeEnum.暂停活动);
-                Thread.sleep(1000);
-                voteEventTypeEnumStateMachine.sendEvent(VoteEventTypeEnum.开始活动);
-                Thread.sleep(1000);
-                voteEventTypeEnumStateMachine.sendEvent(VoteEventTypeEnum.创建活动);
-                Thread.sleep(1000);
-                voteEventTypeEnumStateMachine.sendEvent(VoteEventTypeEnum.结束活动);
-                Thread.sleep(1000);
-            }catch (Exception e){
-                log.warn(e.getMessage());
-            }
-        });
-        thread.start();
+    @Operation(summary = "状态机异步测试")
+    public Result voteTest() {
+        service.voteStateMachineTest();
         return Result.success();
+    }
+
+    @GetMapping("voteTest")
+    @Parameter(name = "code",description = "流程码")
+    @Operation(summary = "状态机流程测试")
+    public Result voteTest(@Param("code") Integer code) {
+        return service.voteTest(code);
     }
 
 }

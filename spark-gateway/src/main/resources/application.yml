@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: spark-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: spark-base-server
+              uri: lb://spark-base-server
+              order: 1
+              predicates:
+                - Path=/sys/**
+            - id: spark-ai-server
+              uri: lb://spark-ai-server
+              order: 2
+              predicates:
+                - Path=/ai/**
+server:
+  port: 8080
+
+
+logging:
+  level:
+    sql: debug
+    com:
+      spark: debug
+      alibaba.cloud.nacos: debug
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.web.reactive: DEBUG

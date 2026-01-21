@@ -1,0 +1,18 @@
+version: '3.3'
+services:
+  spark-gateway:
+    image: spark-gateway:1.0
+    container_name: spark-gateway
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - /opt/gateway/spark-gateway-0.0.1-SNAPSHOT.jar:/opt/gateway/gateway.jar
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
