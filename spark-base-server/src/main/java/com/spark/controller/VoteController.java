@@ -5,13 +5,13 @@ import com.spark.entity.VoteEntity;
 import com.spark.enums.RequestCodeTypeEnum;
 import com.spark.service.VoteService;
 import com.spark.utils.Result;
-import io.lettuce.core.dynamic.annotation.Param;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -70,6 +70,17 @@ public class VoteController {
     @Operation(summary = "获取活动信息")
     public Result getInfo(@Param("id")Long id){
         return service.info(id);
+    }
+
+
+    /**
+     * 记录投票人，投票活动，投票结果
+     * @return
+     */
+    @PostMapping("vote")
+    @Operation(summary = "投票行为")
+    public Result vote(){
+        return service.vote();
     }
 
 

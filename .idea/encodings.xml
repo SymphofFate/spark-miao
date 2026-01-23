@@ -5,9 +5,11 @@
     <file url="file://$PROJECT_DIR$/spark-base-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spark-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spark-module-framework/spark-common-elasticsearch/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spark-module-framework/spark-common-excel/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spark-module-framework/spark-common-grpc/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spark-module-framework/spark-common-minio/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spark-module-framework/spark-common-mybatis/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spark-module-framework/spark-common-rabbitMQ/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spark-module-framework/spark-common-redis/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spark-module-framework/spark-common-security/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spark-module-framework/spark-common-statemachine/src/main/java" charset="UTF-8" />

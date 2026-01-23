@@ -22,17 +22,17 @@ public class VoteDto {
     @JsonSerialize(using = ToStringSerializer.class)
     @Schema(description = "id", required = true)
     private Long id;
-    @Schema(description = "name")
+    @Schema(description = "活动名称")
     private String name;
     @Schema(description = "type")
     private Integer type;
-    @Schema(description = "status")
+    @Schema(description = "活动状态")
     private Integer status;
-    @Schema(description = "info")
+    @Schema(description = "活动简介")
     private String info;
-    @Schema(description = "startTime")
+    @Schema(description = "开始时间")
     private LocalDateTime startTime;
-    @Schema(description = "endTime")
+    @Schema(description = "结束时间")
     private LocalDateTime endTime;
     @Schema(description = "nature")
     private Integer nature;

@@ -24,6 +24,8 @@
         <module>spark-common-minio</module>
         <module>spark-common-grpc</module>
         <module>spark-common-statemachine</module>
+        <module>spark-common-excel</module>
+        <module>spark-common-rabbitMQ</module>
     </modules>
 
     <properties>

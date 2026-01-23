@@ -8,14 +8,18 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.spark.dao.VoteDao;
 import com.spark.dto.OssDto;
+import com.spark.dto.TestDto;
 import com.spark.dto.VoteDto;
 import com.spark.entity.VoteEntity;
 import com.spark.entity.VoteEntity;
 import com.spark.enums.RequestCodeTypeEnum;
+import com.spark.sendList.TestSend;
 import com.spark.service.VoteService;
+import com.spark.util.RabbitMQQueueConstant;
 import com.spark.utils.*;
 import jakarta.annotation.Resource;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
@@ -36,6 +40,9 @@ import java.util.Map;
 public class VoteServiceImpl extends ServiceImpl<VoteDao, VoteEntity> implements VoteService {
     @Resource
     private VoteDao dao;
+
+    @Resource
+    private TestSend send;
 
     @Resource(name = "VoteStateMachine")
     private StateMachine<VoteStateTypeEnum, VoteEventTypeEnum> voteEventTypeEnumStateMachine;
@@ -64,6 +71,24 @@ public class VoteServiceImpl extends ServiceImpl<VoteDao, VoteEntity> implements
         VoteDto build = VoteDto.builder().build();
         BeanUtil.copyProperties(byId,build,"");
         return Result.success(build);
+    }
+
+
+    //TODO：将投票行为异步化，发送到队列里处理，
+    /// 问题1：异步任务如何减少等待时间，不能等待所有人都投完再去处理！而且还要确认每个人的投票状态
+    /// 问题2：如何保证提交幂等性，就是每个人都只能提交一次（暂时考虑使用状态机处理：未投票--->已投票）
+    @Override
+    public Result vote() {
+        try {
+            for (int i = 0; i < 100; i++) {
+                send.testQueueSend(TestDto.builder().test("测试").build());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.failure(RequestCodeTypeEnum.FAILURE);
+        }
+
+        return Result.success();
     }
 
 
@@ -150,6 +175,12 @@ public class VoteServiceImpl extends ServiceImpl<VoteDao, VoteEntity> implements
             voteEventTypeEnumStateMachine.stop();
         }
         return result;
+    }
+
+    @RabbitListener(queues = {RabbitMQQueueConstant.TEST_QUEUE},concurrency = "1-2")
+    public void test(TestDto dto) throws InterruptedException {
+//        Thread.sleep(4000);
+        log.info("成功消费：{}",dto);
     }
 
 

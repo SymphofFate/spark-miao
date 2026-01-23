@@ -26,4 +26,6 @@ public interface VoteService extends IService<VoteEntity> {
     public Result page(Map<String,Object> map);
 
     Result info(Long id);
+
+    Result vote();
 }
