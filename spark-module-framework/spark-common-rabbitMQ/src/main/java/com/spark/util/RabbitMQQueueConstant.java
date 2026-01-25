@@ -9,4 +9,6 @@ public class RabbitMQQueueConstant {
     public final static String TEST_QUEUE ="test_queue";
 
     public final static String DELAYED_QUEUE = "delayed_queue";
+
+    public final static String PROCESS_QUEUE = "process_queue";
 }

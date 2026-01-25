@@ -1,10 +1,12 @@
 package com.spark.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.spark.dto.TestDto;
 import com.spark.dto.VoteDto;
 import com.spark.entity.VoteEntity;
 import com.spark.utils.Result;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,4 +30,6 @@ public interface VoteService extends IService<VoteEntity> {
     Result info(Long id);
 
     Result vote();
+
+    void Test01(List<TestDto> dtos) throws Exception ;
 }

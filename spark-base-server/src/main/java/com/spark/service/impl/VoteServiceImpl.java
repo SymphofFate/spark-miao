@@ -11,7 +11,6 @@ import com.spark.dto.OssDto;
 import com.spark.dto.TestDto;
 import com.spark.dto.VoteDto;
 import com.spark.entity.VoteEntity;
-import com.spark.entity.VoteEntity;
 import com.spark.enums.RequestCodeTypeEnum;
 import com.spark.sendList.TestSend;
 import com.spark.service.VoteService;
@@ -25,10 +24,10 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.persist.StateMachinePersister;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author <a href="https://gitee.com/a-tom-is-cry">Xing</a>
@@ -80,9 +79,12 @@ public class VoteServiceImpl extends ServiceImpl<VoteDao, VoteEntity> implements
     @Override
     public Result vote() {
         try {
-            for (int i = 0; i < 100; i++) {
-                send.testQueueSend(TestDto.builder().test("测试").build());
+            List<TestDto> dtos = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                TestDto build = TestDto.builder().test("测试").build();
+                dtos.add(build);
             }
+            send.delayedQueueSend(dtos);
         }catch (Exception e){
             e.printStackTrace();
             return Result.failure(RequestCodeTypeEnum.FAILURE);
@@ -177,10 +179,31 @@ public class VoteServiceImpl extends ServiceImpl<VoteDao, VoteEntity> implements
         return result;
     }
 
-    @RabbitListener(queues = {RabbitMQQueueConstant.TEST_QUEUE},concurrency = "1-2")
-    public void test(TestDto dto) throws InterruptedException {
-//        Thread.sleep(4000);
-        log.info("成功消费：{}",dto);
+    /**
+     * 事务不能在同一个类中直接调用，因为事务是使用AOP代理，直接使用代理不生效。所以一般消费方法与service不在一块
+     * @param dtos
+     * @throws Exception
+     */
+    @Transactional(timeout = 10,rollbackFor = Exception.class)
+    public void Test01(List<TestDto> dtos) throws Exception {
+        // 验证事务是否激活
+        if (!TransactionSynchronizationManager.isActualTransactionActive()) {
+            throw new IllegalStateException("没有活动的事务!");
+        }
+        try {
+            int i = 0;
+            for (TestDto dto:dtos){
+                if (i > 5) {
+                    throw new Exception("消息处理失败，已记录日志");
+                }
+                log.info("成功消费：{},{}",i,dto);
+                save(VoteEntity.builder().name("测试"+i).type(0).build());
+                i++;
+            }
+        }catch (Exception e){
+            log.warn("出问题了：{}",e.getMessage());
+            throw new Exception("消息处理失败，已记录日志", e);
+        }
     }
 
 

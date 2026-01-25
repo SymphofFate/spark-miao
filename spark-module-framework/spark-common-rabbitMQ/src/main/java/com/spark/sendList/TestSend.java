@@ -86,7 +86,8 @@ public class TestSend {
 
 
     public void delayedQueueSend(Object object) {
-        retrySend(RabbitMQExchangeEnum.DELAYED_EXCHANGE.getExchangeName(),RabbitMQQueueConstant.DELAYED_QUEUE,object,0,0);
+//        retrySend(RabbitMQExchangeEnum.DELAYED_EXCHANGE.getExchangeName(),RabbitMQQueueConstant.DELAYED_QUEUE,object,0,0);
+        retrySend("",RabbitMQQueueConstant.DELAYED_QUEUE,object,0,0);
     }
 
 }

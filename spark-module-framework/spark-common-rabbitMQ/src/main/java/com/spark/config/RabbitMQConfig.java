@@ -2,6 +2,7 @@ package com.spark.config;
 
 import com.spark.util.RabbitMQExchangeEnum;
 import com.spark.util.RabbitMQQueueConstant;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -21,6 +22,7 @@ import java.util.Map;
  * @Description
  */
 @Configuration
+@Slf4j
 public class RabbitMQConfig {
 
     @Bean
@@ -50,21 +52,31 @@ public class RabbitMQConfig {
     public Queue delayedQueue(){
         Map<String, Object> args = new HashMap<>(3);
         // 设置死信交换机
-        args.put("x-dead-letter-exchange", RabbitMQExchangeEnum.DELAYED_EXCHANGE);
+        args.put("x-dead-letter-exchange", RabbitMQExchangeEnum.DELAYED_EXCHANGE.getExchangeName());
         // 设置死信路由键
-        args.put("x-dead-letter-routing-key", RabbitMQQueueConstant.DELAYED_QUEUE);
+        args.put("x-dead-letter-routing-key", RabbitMQQueueConstant.PROCESS_QUEUE);
         // 设置队列消息过期时间（单位：毫秒），15分钟
-        args.put("x-message-ttl", 900000);
-        return new Queue(RabbitMQQueueConstant.DELAYED_QUEUE,true,false,true,args);
+        args.put("x-message-ttl", 9000);
+        log.info("创建延迟队列：{}，TTL={}ms", RabbitMQQueueConstant.DELAYED_QUEUE, 9000);
+        return new Queue(RabbitMQQueueConstant.DELAYED_QUEUE,true,false,false,args);
+    }
+
+    //处理队列
+    @Bean
+    public Queue processQueue(){
+        return new Queue(RabbitMQQueueConstant.PROCESS_QUEUE,true,false,false);
     }
 
     @Bean
     public DirectExchange delayedExchange(){
-        return new DirectExchange(RabbitMQExchangeEnum.DELAYED_EXCHANGE.getExchangeName());
+        log.info("创建死信交换机：{}", RabbitMQExchangeEnum.DELAYED_EXCHANGE.getExchangeName());
+        return new DirectExchange(RabbitMQExchangeEnum.DELAYED_EXCHANGE.getExchangeName(),true,false);
     }
 
     @Bean
     public Binding delayedBinding(){
-        return BindingBuilder.bind(delayedQueue()).to(delayedExchange()).withQueueName();
+        return BindingBuilder.bind(processQueue()).to(delayedExchange())
+                .with(RabbitMQQueueConstant.PROCESS_QUEUE);
     }
+
 }
